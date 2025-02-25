@@ -40,16 +40,24 @@ class AdminController extends Controller
         $pendingEnrollments = $pendingEnrollmentsQuery->paginate(10, ['*'], 'pending_page');
         $approvedEnrollments = $approvedEnrollmentsQuery->paginate(10, ['*'], 'approved_page');
         
+        // Handle search for events
+        $eventSearch = $request->input('event_search');
+        $eventsQuery = Event::orderBy('eventDay', 'asc')
+            ->orderBy('startTime', 'asc');
+        
+        if ($eventSearch) {
+            $eventsQuery->where('eventName', 'like', "%{$eventSearch}%");
+        }
+        
         // Get paginated events
-        $events = Event::orderBy('eventDay', 'asc')
-            ->orderBy('startTime', 'asc')
-            ->paginate(20, ['*'], 'events_page');
+        $events = $eventsQuery->paginate(10, ['*'], 'events_page');
             
         return view('admin.dashboard', [
             'events' => $events,
             'pendingEnrollments' => $pendingEnrollments,
             'approvedEnrollments' => $approvedEnrollments,
-            'search' => $search
+            'search' => $search,
+            'eventSearch' => $eventSearch
         ]);
     }
     
