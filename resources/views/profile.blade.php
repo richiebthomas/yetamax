@@ -53,6 +53,15 @@
                                 @foreach($events as $eventData)
                                     <div class="col-md-6 mb-4">
                                         <div class="event-card h-100">
+                                            
+                                            <div class="event-status">
+                                                @if($eventData['is_approved'])
+                                                    <span class="badge badge-success">Approved</span>
+                                                @else
+                                                    <span class="badge badge-warning">Pending</span>
+                                                @endif
+                                            </div>
+                                            
                                             <div class="event-header">
                                                 <h5 class="event-title">
                                                     <i class="fas fa-calendar-alt mr-2"></i>
@@ -61,16 +70,17 @@
                                                 <div class="event-badge">{{ $eventData['event']->eventCategory }}</div>
                                             </div>
                                             
+                                            
                                             <div class="event-body">
                                                 <div class="event-detail">
                                                     <i class="fas fa-map-marker-alt text-danger mr-2"></i>
                                                     <span>Day {{ $eventData['event']->eventDay }}</span>
                                                 </div>
                                                 
+                                                
                                                 <div class="event-detail">
                                                     <i class="fas fa-clock text-info mr-2"></i>
                                                     <span>{{ $eventData['event']->startTime }}</span> - <span>{{ $eventData['event']->endTime }}</span>
-                                                    
                                                 </div>
                                                 
                                                 @if($eventData['team'])
@@ -91,9 +101,6 @@
                                                                             <i class="fas fa-user-circle text-secondary mr-1"></i>
                                                                             {{ $member['name'] }} ({{ $member['roll_no'] }})
                                                                         </li>
-
-
-                                                                        
                                                                     @endforeach
                                                                 </ul>
                                                             </div>
@@ -106,27 +113,31 @@
                                                 <a href="/event/{{ $eventData['event']->id }}" class="btn btn-sm btn-outline-primary">
                                                     <i class="fas fa-info-circle mr-1"></i> View Details
                                                 </a>
-                                                <div class="event-detail">
-                                                    
-                                                    <div class="detail-content">
-                                                        <label class="detail-label"></label>
-                                                        <div class="detail-value">
-                                                            <a href="{{ $eventData['event']->whatsapp }}" target="_blank" class="btn btn-sm btn-success whatsapp-link">
-                                                                <i class="fab fa-whatsapp me-1"></i>
-                                                                Join WhatsApp Group
-                                                            </a>
+                                                
+                                                @if($eventData['is_approved'])
+                                                    <div class="event-detail">
+                                                        <div class="detail-content">
+                                                            <label class="detail-label"></label>
+                                                            <div class="detail-value">
+                                                                <a href="{{ $eventData['event']->whatsapp }}" target="_blank" class="btn btn-sm btn-success whatsapp-link">
+                                                                    <i class="fab fa-whatsapp me-1"></i>
+                                                                    Join WhatsApp Group
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    
-                                                </div>
-                                                <form action="/unenroll/{{ $eventData['event']->id }}" method="POST">
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-sm btn-danger">
-                                                        <i class="fas fa-times me-1"></i>
-                                                        Unenroll
-                                                    </button>
-                                                </form>
+                                                @else
+                                                    <form action="/unenroll/{{ $eventData['event']->id }}" method="POST">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-danger">
+                                                            <i class="fas fa-times me-1"></i>
+                                                            Unenroll
+                                                        </button>
+                                                    </form>
+                                                @endif
                                             </div>
+                                            
+                                            
                                         </div>
                                     </div>
                                 @endforeach
@@ -191,6 +202,7 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            position: relative; /* Added for status indicator positioning */
         }
         
         .event-card:hover {
@@ -243,6 +255,30 @@
             padding: 1rem;
             border-top: 1px solid #e9ecef;
             background-color: #f8f9fa;
+        }
+        
+        /* Status Indicator Styles */
+        .status-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        
+        .badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .badge-warning {
+            background-color: #ffc107;
+            color: black;
         }
     </style>
 </x-layout>

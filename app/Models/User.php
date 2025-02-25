@@ -53,5 +53,13 @@ class User extends Authenticatable
     public function teams()
     {
         return $this->hasMany(Team::class);
-    }   
+    }
+    public function adminEvents()
+    {
+        return $this->hasMany(EventAdmin::class);
+    }
+    public function isEventAdmin($eventId)
+    {
+        return $this->adminEvents()->where('event_id', $eventId)->exists();
+    }
 }

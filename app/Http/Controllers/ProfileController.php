@@ -15,14 +15,14 @@ class ProfileController extends Controller
         // Find the user by roll number
         $user = User::where('roll_no', $roll_no)->firstOrFail();
         
-        // Get all enrollments for the user
-        $enrollments = Enrollment::where('user_id', $user->id)->get();
+        // Eager load enrollments with events and teams
+        $enrollments = Enrollment::with(['event', 'team'])->where('user_id', $user->id)->get();
         
         // Group events by day
         $eventsByDay = [];
         
         foreach ($enrollments as $enrollment) {
-            $event = Event::find($enrollment->event_id);
+            $event = $enrollment->event;
             
             if ($event) {
                 $day = $event->eventDay;
@@ -32,7 +32,7 @@ class ProfileController extends Controller
                 }
                 
                 // Get team information
-                $team = Team::find($enrollment->team_id);
+                $team = $enrollment->team;
                 $teamInfo = null;
                 
                 if ($team) {
@@ -59,7 +59,8 @@ class ProfileController extends Controller
                 
                 $eventsByDay[$day][] = [
                     'event' => $event,
-                    'team' => $teamInfo
+                    'team' => $teamInfo,
+                    'is_approved' => $enrollment->approved
                 ];
             }
         }

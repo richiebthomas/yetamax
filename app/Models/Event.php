@@ -31,4 +31,9 @@ class Event extends Model
     {
         return $this->hasMany(Enrollment::class);
     }
+
+    public function admins()
+    {
+        return $this->hasMany(EventAdmin::class);
+    }
 }
