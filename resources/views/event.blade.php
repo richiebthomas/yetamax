@@ -100,11 +100,13 @@
                     @csrf
                     @if($event->teamSize > 1)
                         <div class="team-members-form">
-                            <label for="team-name">Team Name (optional):</label>
+                            
+                            <label for="team-name">Team Name :</label>
+                            
                             <input type="text" name="team_name" id="team-name" class="form-control mb-3" placeholder="Enter team name">
-
+                            <div class="mb-3"> Member 1: {{ auth()->user()->roll_no }}</div>
                             @for($i = 1; $i < $event->teamSize; $i++)
-                                <label for="roll-number-{{ $i }}">Roll Number {{ $i }}:</label>
+                                <label for="roll-number-{{ $i }}">Member {{ $i+1 }}:</label>
                                 <input type="text" name="roll_numbers[]" id="roll-number-{{ $i }}" class="form-control mb-3" placeholder="Enter roll number">
                             @endfor
                         </div>

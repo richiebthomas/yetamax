@@ -117,7 +117,15 @@
                                                             </a>
                                                         </div>
                                                     </div>
+                                                    
                                                 </div>
+                                                <form action="/unenroll/{{ $eventData['event']->id }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-times me-1"></i>
+                                                        Unenroll
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
