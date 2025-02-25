@@ -26,11 +26,12 @@
         <!-- End Error Messages Section -->
 
         <div class="event-card">
+            <div class="event-badge">{{ $event->eventCategory }}</div>
             <div class="event-header">
                 <h1 class="event-title">
                     <i class="fas fa-calendar-alt me-2"></i>{{ $event->eventName }}
                 </h1>
-                <div class="event-badge">{{ $event->eventCategory }}</div>
+                
             </div>
             
             <div class="event-body">
@@ -142,14 +143,33 @@
         --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
+    .container {
+        width: 100%;
+        padding: var(--spacing-md);
+        max-width: none;
+    }
+
     .event-card {
         background: white;
         border-radius: var(--border-radius);
         box-shadow: var(--shadow);
         padding: var(--spacing-lg);
-        max-width: 800px;
         margin: 0 auto;
         position: relative;
+    }
+
+    .event-image-container {
+        margin: -2.5rem -2.5rem 2rem;
+        height: 400px;
+        position: relative;
+        overflow: hidden;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+    }
+
+    .event-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     .event-header {
@@ -186,7 +206,7 @@
 
     .detail-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: var(--spacing-md);
         margin-top: var(--spacing-md);
     }
@@ -268,17 +288,39 @@
     }
 
     @media (max-width: 768px) {
+        .container {
+            padding: 0.5rem;
+        }
+        
         .event-card {
             padding: var(--spacing-md);
-            margin: 0 1rem;
+            margin: 0;
+            border-radius: 0;
+        }
+        
+        .event-image-container {
+            margin: -1rem -1rem 1rem;
+            height: 250px;
+            border-radius: 0;
+        }
+        
+        .detail-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
         }
         
         .event-title {
             font-size: 1.5rem;
         }
+    }
+
+    @media (max-width: 480px) {
+        .event-image-container {
+            height: 200px;
+        }
         
-        .detail-grid {
-            grid-template-columns: 1fr;
+        .event-detail {
+            padding: 0.75rem;
         }
     }
 
@@ -332,8 +374,9 @@
 
     /* Alert styles */
     .alert-container {
-        max-width: 800px;
-        margin: 0 auto;
+        width: 100%;
+        max-width: none;
+        padding: 0 var(--spacing-md);
     }
 
     .alert {
