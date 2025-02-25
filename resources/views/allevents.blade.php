@@ -80,23 +80,49 @@
         .filter-button {
             padding: 0.75rem 1.25rem;
             border: none;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 5px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.2s ease;
-            font-size: 0.9rem;
-            flex: 1;
-            min-width: max-content;
-            white-space: nowrap;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 2px solid transparent;
         }
 
         .filter-button:hover {
-            background-color: var(--primary-dark);
+            background-color: #f3f4f6;
+            transform: translateY(-2px);
         }
 
         .active-filter {
-            background-color: var(--primary-dark);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
+            transform: translateY(-3px);
+        }
+
+        .active-filter:hover {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .active-filter::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
         }
 
         /* Improved Event Cards */
