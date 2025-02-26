@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -254,10 +252,6 @@
 </head>
 <body>
   <x-layout>
-  @php
-  $selectedDay = $selectedDay ?? 1;
-  $selectedType = $selectedType ?? 'technical';
-@endphp
     <div class="container py-md-5">
       <div class="filters">
         <form method="GET" action="{{ route('allevents') }}">
