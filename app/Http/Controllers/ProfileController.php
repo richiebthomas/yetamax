@@ -17,6 +17,7 @@ class ProfileController extends Controller
         
         // Eager load enrollments with events and teams
         $enrollments = Enrollment::with(['event', 'team'])->where('user_id', $user->id)->get();
+        $totalEnrollments = count($enrollments);
         
         // Calculate total fees for pending enrollments
         $totalFees = 0;
@@ -81,6 +82,7 @@ class ProfileController extends Controller
                     'is_approved' => $enrollment->approved,
                     'isTeamEvent' => $event->teamSize > 1,
                     'entryFee' => $event->entryFees
+                
                 ];
             }
         }
@@ -91,7 +93,8 @@ class ProfileController extends Controller
         return view('profile', [
             'user' => $user,
             'eventsByDay' => $eventsByDay,
-            'totalFees' => $totalFees
+            'totalFees' => $totalFees,
+            'totalEnrollments' => $totalEnrollments,
         ]);
     }
 } 
