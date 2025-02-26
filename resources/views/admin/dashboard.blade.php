@@ -44,33 +44,37 @@
                                 <th>User</th>
                                 <th>Event</th>
                                 <th>Day</th>
-                                <th>Team</th>
-                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Fees</th>
+                                <th>Team members</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($pendingEnrollments as $enrollment)
-                                <tr>
-                                    <td>
-                                        <div class="user-info">
-                                            <span class="user-name">{{ $enrollment->user->name }}</span>
-                                            <span class="user-roll">{{ $enrollment->user->roll_no }}</span>
-                                        </div>
-                                    </td>
-                                    <td>{{ $enrollment->event->eventName }}</td>
-                                    <td>Day {{ $enrollment->event->eventDay }}</td>
-                                    <td>{{ $enrollment->team_id ? $enrollment->team->teamName : 'Individual' }}</td>
-                                    <td>{{ $enrollment->created_at->format('M d, Y') }}</td>
-                                    <td>
-                                        <form action="{{ route('admin.enrollments.approve', $enrollment->id) }}" method="POST">
-                                            @csrf
-                                            <button type="submit" class="btn btn-success btn-sm">
-                                                <i class="fas fa-check"></i> Approve
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
+                                @if($enrollment->event->teamSize <= 1 || $enrollment->user->isTeamLeader($enrollment->team_id))
+                                    <tr>
+                                        <td>
+                                            <div class="user-info">
+                                                <span class="user-name">{{ $enrollment->user->name }}</span>
+                                                <span class="user-roll">{{ $enrollment->user->roll_no }}</span>
+                                            </div>
+                                        </td>
+                                        <td>{{ $enrollment->event->eventName }}</td>
+                                        <td>Day {{ $enrollment->event->eventDay }}</td>
+                                        <td>{{ $enrollment->event->eventCategory }}</td>
+                                        <td>₹{{ $enrollment->event->entryFees }}</td>
+                                        <td>{{ $enrollment->team->members[0] == "[" ? $enrollment->team->members : 'Individual' }}</td>
+                                        <td>
+                                            <form action="{{ route('admin.enrollments.approve', $enrollment->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-success btn-sm">
+                                                    <i class="fas fa-check"></i> Approve
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endif
                             @endforeach
                         </tbody>
                     </table>
@@ -124,33 +128,37 @@
                                 <th>User</th>
                                 <th>Event</th>
                                 <th>Day</th>
-                                <th>Team</th>
-                                <th>Date Approved</th>
+                                <th>Fees</th>
+                                <th>Event Type</th>
+                                <th>Team members</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($approvedEnrollments as $enrollment)
-                                <tr>
-                                    <td>
-                                        <div class="user-info">
-                                            <span class="user-name">{{ $enrollment->user->name }}</span>
-                                            <span class="user-roll">{{ $enrollment->user->roll_no }}</span>
-                                        </div>
-                                    </td>
-                                    <td>{{ $enrollment->event->eventName }}</td>
-                                    <td>Day {{ $enrollment->event->eventDay }}</td>
-                                    <td>{{ $enrollment->team_id ? $enrollment->team->teamName : 'Individual' }}</td>
-                                    <td>{{ $enrollment->updated_at->format('M d, Y') }}</td>
-                                    <td>
-                                        <form action="{{ route('admin.enrollments.disapprove', $enrollment->id) }}" method="POST">
-                                            @csrf
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                <i class="fas fa-times"></i> Disapprove
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
+                                @if($enrollment->event->teamSize <= 1 || $enrollment->user->isTeamLeader($enrollment->team_id))
+                                    <tr>
+                                        <td>
+                                            <div class="user-info">
+                                                <span class="user-name">{{ $enrollment->user->name }}</span>
+                                                <span class="user-roll">{{ $enrollment->user->roll_no }}</span>
+                                            </div>
+                                        </td>
+                                        <td>{{ $enrollment->event->eventName }}</td>
+                                        <td>Day {{ $enrollment->event->eventDay }}</td>
+                                        <td>₹{{ $enrollment->event->entryFees }}</td>
+                                        <td>{{ $enrollment->event->eventCategory }}</td>
+                                        <td>{{ $enrollment->team->members[0] == "[" ? $enrollment->team->members : 'Individual' }}</td>
+                                        <td>
+                                            <form action="{{ route('admin.enrollments.disapprove', $enrollment->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="fas fa-times"></i> Disapprove
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endif
                             @endforeach
                         </tbody>
                     </table>

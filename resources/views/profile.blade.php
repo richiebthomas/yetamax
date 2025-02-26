@@ -30,9 +30,21 @@
                                 </div>
                                 <div>
                                     <p class="detail-label mb-0 small text-muted">Events Enrolled</p>
-                                    <p class="detail-value mb-0">{{ count($user->enrollments) }}</p>
+                                    <p class="detail-value mb-0">{{ count($eventsByDay) }}</p>
                                 </div>
                             </div>
+
+                            @if($totalFees > 0)
+                                <div class="detail-item d-flex align-items-center mb-3">
+                                    <div class="icon-container mr-3">
+                                        <i class="fas fa-rupee-sign text-warning"></i>
+                                    </div>
+                                    <div>
+                                        <p class="detail-label mb-0 small text-muted">Total Pending Fees</p>
+                                        <p class="detail-value mb-0">₹{{ $totalFees }}</p>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -83,6 +95,21 @@
                                                     <span>{{ $eventData['event']->startTime }}</span> - <span>{{ $eventData['event']->endTime }}</span>
                                                 </div>
                                                 
+                                                <div class="event-detail">
+                                                    <i class="fas fa-rupee-sign text-success mr-2"></i>
+                                                    <span>
+                                                        @if($eventData['event']->teamSize > 1)
+                                                            @if($eventData['team'] && $user->roll_no !== $eventData['team']['members'][0]['roll_no'])
+                                                                <span class="text-muted">To be paid by team leader</span>
+                                                            @else
+                                                                Entry Fees: ₹{{ $eventData['event']->entryFees }}
+                                                            @endif
+                                                        @else
+                                                            Entry Fees: ₹{{ $eventData['event']->entryFees }}
+                                                        @endif
+                                                    </span>
+                                                </div>
+                                                
                                                 @if($eventData['team'])
                                                     <div class="team-info mt-3">
                                                         @if($eventData['team']['name'])
@@ -96,10 +123,13 @@
                                                             <div class="team-members">
                                                                 <strong>Members:</strong>
                                                                 <ul class="list-unstyled ml-3 mb-0">
-                                                                    @foreach($eventData['team']['members'] as $member)
+                                                                    @foreach($eventData['team']['members'] as $index => $member)
                                                                         <li>
                                                                             <i class="fas fa-user-circle text-secondary mr-1"></i>
                                                                             {{ $member['name'] }} ({{ $member['roll_no'] }})
+                                                                            @if($index === 0)
+                                                                                <span class="badge badge-info">Team Leader</span>
+                                                                            @endif
                                                                         </li>
                                                                     @endforeach
                                                                 </ul>
@@ -279,6 +309,24 @@
         .badge-warning {
             background-color: #ffc107;
             color: black;
+        }
+        
+        .badge-info {
+            background-color: #3b82f6;
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+        }
+        
+        .text-success {
+            color: #10b981;
+        }
+        
+        .text-muted {
+            color: #6b7280;
+            font-style: italic;
         }
     </style>
 </x-layout>

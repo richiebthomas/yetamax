@@ -18,6 +18,9 @@ class ProfileController extends Controller
         // Eager load enrollments with events and teams
         $enrollments = Enrollment::with(['event', 'team'])->where('user_id', $user->id)->get();
         
+        // Calculate total fees for pending enrollments
+        $totalFees = 0;
+        
         // Group events by day
         $eventsByDay = [];
         
@@ -25,6 +28,21 @@ class ProfileController extends Controller
             $event = $enrollment->event;
             
             if ($event) {
+                // Only calculate fees for pending enrollments
+                if (!$enrollment->approved) {
+                    $team = $enrollment->team;
+                    
+                    // For team events, only add fees if user is team leader
+                    if ($event->teamSize > 1) {
+                        if ($team && $team->getTeamMembers()[0] === $user->roll_no) {
+                            $totalFees += $event->entryFees;
+                        }
+                    } else {
+                        // For individual events, always add fees
+                        $totalFees += $event->entryFees;
+                    }
+                }
+                
                 $day = $event->eventDay;
                 
                 if (!isset($eventsByDay[$day])) {
@@ -60,7 +78,9 @@ class ProfileController extends Controller
                 $eventsByDay[$day][] = [
                     'event' => $event,
                     'team' => $teamInfo,
-                    'is_approved' => $enrollment->approved
+                    'is_approved' => $enrollment->approved,
+                    'isTeamEvent' => $event->teamSize > 1,
+                    'entryFee' => $event->entryFees
                 ];
             }
         }
@@ -70,7 +90,8 @@ class ProfileController extends Controller
         
         return view('profile', [
             'user' => $user,
-            'eventsByDay' => $eventsByDay
+            'eventsByDay' => $eventsByDay,
+            'totalFees' => $totalFees
         ]);
     }
 } 

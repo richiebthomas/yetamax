@@ -54,6 +54,34 @@ class User extends Authenticatable
     {
         return $this->hasMany(Team::class);
     }
+
+public function isTeamLeader($teamId)
+{
+    $team = Team::find($teamId);
+    if (!$team) {
+        
+        return false;
+    }
+    
+    // Decode the JSON string into an array
+    $members = json_decode($team->members, true);
+    
+    // Check if json_decode failed
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        
+        return false;
+    }
+    
+    if (empty($members) || !is_array($members)) {
+        
+        return false;
+    }
+    
+    // Check if the first member's roll number matches the user's roll number
+    
+    
+    return $members[0] === $this->roll_no;
+    }
     public function adminEvents()
     {
         return $this->hasMany(EventAdmin::class);

@@ -12,7 +12,23 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
+
+
 {
+    function jsonArrayToCsv($jsonArray) {
+        // Decode the JSON string into a PHP array
+        $array = json_decode($jsonArray, true);
+    
+        // Check if decoding was successful and the result is an array
+        if (json_last_error() === JSON_ERROR_NONE && is_array($array)) {
+            // Convert the array to a CSV string
+            return implode(', ', $array);
+        }
+    
+        // Return an empty string if the input is invalid
+        return '';
+    }
+    
     public function dashboard(Request $request)
     {
         // Handle search by roll number
