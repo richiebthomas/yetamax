@@ -30,7 +30,7 @@
                                 </div>
                                 <div>
                                     <p class="detail-label mb-0 small text-muted">Events Enrolled</p>
-                                    <p class="detail-value mb-0">{{ count($eventsByDay) }}</p>
+                                    <p class="detail-value mb-0">{{ $totalEnrollments }}</p>
                                 </div>
                             </div>
 
@@ -185,6 +185,8 @@
     </div>
     
     <style>
+
+        
         /* User Card Styles */
         .avatar-placeholder {
             width: 100px;
@@ -230,13 +232,14 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             transition: transform 0.2s, box-shadow 0.2s;
             height: 100%;
-            display: flex;
-            flex-direction: column;
-            position: relative; /* Added for status indicator positioning */
+            border: 2px solid #021014; /* Cool blue outline */
+            background-color: white; /* Keep the card itself white */
+            
+            
         }
         
         .event-card:hover {
-            transform: translateY(-5px);
+            
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
@@ -328,5 +331,12 @@
             color: #6b7280;
             font-style: italic;
         }
+        /* Set the page background to cool blue */
+body {
+    background-color: #e0f2ff; /* Light cool blue */
+}
+
+
+
     </style>
 </x-layout>

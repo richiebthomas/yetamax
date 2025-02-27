@@ -13,6 +13,13 @@ class EventController extends Controller
 
     public function index(Request $request)
     {
+        if (!$request->has('day') || !$request->has('type')) {
+            // Redirect with default values if missing
+            return redirect()->route('allevents', [
+                'day' => $request->get('day', 1),
+                'type' => $request->get('type', 'technical'),
+            ]);
+        }
         // Get filter values from the request
         $day = $request->input('day');
         $type = $request->input('type');
