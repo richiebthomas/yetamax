@@ -64,7 +64,7 @@
                         <i class="fas fa-chair detail-icon"></i>
                         <div class="detail-content">
                             <label class="detail-label">Available Seats</label>
-                            <div class="detail-value">{{ $event->maxSeats - ($event->enrollments()->count() ? $event->enrollments()->count() : 0) }}</div>
+                            <div class="detail-value">{{ $event->maxSeats - ($event->enrollments()->count() ? $event->enrollments()->count() - ($event->teamSize - 1) : 0)  }}</div>
                         </div>
                     </div>
 
@@ -88,13 +88,16 @@
             </div>
 
             <div class="event-footer">
-                @if(auth()->user()->enrollments()->where('event_id', $event->id)->exists())
+                @if(auth()->user()->enrollments()->where('event_id', $event->id)->where('approved', 1)->exists())
+                You cannot unenroll as your enrollment has been approved
+                @elseif(auth()->user()->enrollments()->where('event_id', $event->id)->exists())
                 <form action="/unenroll/{{ $event->id }}" method="POST">
                     @csrf
                     <button type="submit" class="btn btn-danger enroll-link">
                         <i class="fas fa-times-circle me-2"></i>Unenroll
                     </button>
                 </form>
+                
                 @else
                 <form action="/enroll/{{ $event->id }}" method="POST">
                     @csrf

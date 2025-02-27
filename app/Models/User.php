@@ -90,4 +90,12 @@ public function isTeamLeader($teamId)
     {
         return $this->adminEvents()->where('event_id', $eventId)->exists();
     }
+    public function isAdmin()
+    {
+        return $this->is_super;
+    }
+    public function isEventAdmin1()
+    {
+        return $this->is_admin;
+    }
 }
