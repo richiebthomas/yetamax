@@ -104,6 +104,16 @@
             <span>All Events</span>
         </a>
         @auth
+        @if(auth()->user()->isAdmin())
+        <a href="/admin/dashboard" class="btn nav-btn">
+            <i class="fas fa-user mr-1"></i> Admin
+        </a>
+        @endif
+        @if(auth()->user()->isEventAdmin1())
+        <a href="/event-admin/dashboard" class="btn nav-btn">
+            <i class="fas fa-user mr-1"></i> Event Admin
+        </a>
+        @endif
         <div class="d-flex align-items-center">
           <a href="/profile/{{auth()->user()->roll_no}}" class="btn nav-btn btn-profile">
             <i class="fas fa-user mr-1"></i> Profile
