@@ -120,7 +120,7 @@ The system uses several key tables:
 
 ## Support
 
-For support, please email rbtthegreat@gmai.com or raise an issue in the repository.
+For support, please email rbtthegreat@gmail.com or raise an issue in the repository.
 
 ## Acknowledgments
 
