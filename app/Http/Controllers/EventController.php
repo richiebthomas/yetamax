@@ -149,42 +149,91 @@ class EventController extends Controller
 
     public function unenrollEvent($id)
     {
-        $event = Event::find($id);
-        $user = auth()->user();
-        
-        // Find the enrollment
-        $enrollment = Enrollment::where('user_id', $user->id)
-                               ->where('event_id', $event->id)
-                               ->first();
-        
-        if (!$enrollment) {
-            return redirect()->back()->withErrors('Enrollment not found.');
-        }
-        
-        // Get the team ID
-        $teamId = $enrollment->team_id;
-        
-        // Find the team
-        $team = Team::find($teamId);
-        
-        if ($team) {
-            // If it's a team enrollment (team size > 1)
-            if ($event->teamSize > 1) {
-                // Delete all enrollments with this team_id
-                Enrollment::where('team_id', $teamId)->delete();
-                
-                // Delete the team
-                $team->delete();
-            } else {
-                // For single-user enrollment, just delete the enrollment and team
-                $enrollment->delete();
-                $team->delete();
+        try {
+            // Check if user is authenticated
+            if (!auth()->check()) {
+                return redirect('/')->with('failure', 'Please log in to unenroll from events.');
             }
-        } else {
-            // If team not found, just delete the enrollment
-            $enrollment->delete();
+
+            // Find the event
+            $event = Event::find($id);
+            if (!$event) {
+                return redirect()->back()->withErrors('Event not found.');
+            }
+
+            $user = auth()->user();
+            
+            // Find the enrollment
+            $enrollment = Enrollment::where('user_id', $user->id)
+                                   ->where('event_id', $event->id)
+                                   ->first();
+            
+            if (!$enrollment) {
+                return redirect()->back()->withErrors('You are not enrolled in this event.');
+            }
+
+            // Check if enrollment is already approved
+            if ($enrollment->approved) {
+                return redirect()->back()->withErrors('Cannot unenroll from an approved event. Please contact the event administrator.');
+            }
+            
+            try {
+                // Begin transaction
+                \DB::beginTransaction();
+
+                // Get the team ID
+                $teamId = $enrollment->team_id;
+                
+                // Find the team
+                $team = Team::find($teamId);
+                
+                if ($team) {
+                    // If it's a team enrollment (team size > 1)
+                    if ($event->teamSize > 1) {
+                        // Check if any team member's enrollment is approved
+                        $approvedTeamEnrollments = Enrollment::where('team_id', $teamId)
+                            ->where('approved', 1)
+                            ->exists();
+                        
+                        if ($approvedTeamEnrollments) {
+                            \DB::rollBack();
+                            return redirect()->back()->withErrors('Cannot unenroll as one or more team members have approved enrollments.');
+                        }
+
+                        // For team leader validation
+                        $teamMembers = $team->getTeamMembers();
+                        if (!is_array($teamMembers) || empty($teamMembers) || $teamMembers[0] !== $user->roll_no) {
+                            \DB::rollBack();
+                            return redirect()->back()->withErrors('Only the team leader can unenroll the team.');
+                        }
+                        
+                        // Delete all enrollments with this team_id
+                        Enrollment::where('team_id', $teamId)->delete();
+                        
+                        // Delete the team
+                        $team->delete();
+                    } else {
+                        // For single-user enrollment, just delete the enrollment and team
+                        $enrollment->delete();
+                        $team->delete();
+                    }
+                } else {
+                    // If team not found, just delete the enrollment
+                    $enrollment->delete();
+                }
+
+                \DB::commit();
+                return redirect()->back()->with('success', 'You have successfully unenrolled from the event.');
+
+            } catch (\Exception $e) {
+                \DB::rollBack();
+                \Log::error('Unenroll error: ' . $e->getMessage());
+                return redirect()->back()->withErrors('An error occurred while unenrolling. Please try again later.');
+            }
+
+        } catch (\Exception $e) {
+            \Log::error('Unenroll error: ' . $e->getMessage());
+            return redirect()->back()->withErrors('An error occurred while processing your request. Please try again later.');
         }
-        
-        return redirect()->back()->with('success', 'You have successfully unenrolled from the event.');
     }
 }
