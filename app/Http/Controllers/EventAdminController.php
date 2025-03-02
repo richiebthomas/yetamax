@@ -37,15 +37,20 @@ class EventAdminController extends Controller
         
         // Get all enrollments for this event
         $enrollments = Enrollment::where('event_id', $eventId)
+            ->where('approved', true)
             ->with(['user', 'team'])
             ->get();
             
-        // Group enrollments by team
+        // Group enrollments by team or individual based on event's team size
         $teams = [];
         $individualParticipants = [];
         
+        // Check if this is a team event
+        $isTeamEvent = $event->teamSize > 1;
+        
         foreach ($enrollments as $enrollment) {
-            if ($enrollment->team_id) {
+            if ($isTeamEvent && $enrollment->team_id) {
+                // For team events, group by team
                 if (!isset($teams[$enrollment->team_id])) {
                     $teams[$enrollment->team_id] = [
                         'team' => $enrollment->team,
@@ -54,6 +59,7 @@ class EventAdminController extends Controller
                 }
                 $teams[$enrollment->team_id]['members'][] = $enrollment->user;
             } else {
+                // For individual events or enrollments without valid teams
                 $individualParticipants[] = $enrollment->user;
             }
         }
@@ -61,7 +67,8 @@ class EventAdminController extends Controller
         return view('event-admin.manage', [
             'event' => $event,
             'teams' => $teams,
-            'individualParticipants' => $individualParticipants
+            'individualParticipants' => $individualParticipants,
+            'isTeamEvent' => $isTeamEvent
         ]);
     }
     
