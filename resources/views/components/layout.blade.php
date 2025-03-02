@@ -16,6 +16,11 @@
       .header-bar {
         background-color: #1a1a2e;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        height: 70px; /* Fixed height for consistency */
+      }
+      
+      .navbar {
+        height: 70px; /* Match header-bar height */
       }
       
       .navbar-brand {
@@ -36,6 +41,10 @@
         font-weight: 600;
         transition: all 0.3s ease;
         margin-left: 0.5rem;
+        height: 40px; /* Fixed height for buttons */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
       
       .btn-profile {
@@ -76,6 +85,7 @@
         color: white;
         margin-right: 0.5rem;
         margin-bottom: 0.5rem;
+        height: 40px; /* Fixed height for inputs */
       }
       
       .login-form input::placeholder {
@@ -97,6 +107,7 @@
       .navbar-toggler {
         border-color: rgba(255, 255, 255, 0.3);
         margin-left: 0.5rem;
+        height: 40px; /* Fixed height for toggler */
       }
 
       .navbar-toggler-icon {
@@ -107,6 +118,7 @@
       .always-visible {
         display: flex !important;
         align-items: center;
+        height: 100%; /* Full height of navbar */
       }
 
       @media (max-width: 767.98px) {
@@ -126,14 +138,21 @@
           margin-top: 1rem;
           padding-top: 1rem;
           border-top: 1px solid rgba(255, 255, 255, 0.1);
+          position: absolute;
+          top: 70px; /* Position below navbar */
+          left: 0;
+          right: 0;
+          background-color: #1a1a2e;
+          z-index: 1000;
+          padding: 1rem;
         }
       }
     </style>
   </head>
   <body>
     <header class="header-bar mb-3">
-      <div class="container">
-        <nav class="navbar navbar-expand-md p-0">
+      <div class="container h-100">
+        <nav class="navbar navbar-expand-md p-0 h-100">
           <h4 class="my-0 mr-md-auto font-weight-normal"><a href="/" class="navbar-brand">YETAMAX 2029</a></h4>
           
           <!-- Always visible items -->

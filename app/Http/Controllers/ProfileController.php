@@ -10,12 +10,7 @@ use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
-    public function __construct()
-    {
-        // Require authentication for all profile actions
-        $this->middleware('auth');
-    }
-
+    
     public function show($roll_no)
     {
         try {
