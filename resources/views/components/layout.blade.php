@@ -121,10 +121,50 @@
         height: 100%; /* Full height of navbar */
       }
 
+      /* Login form container - ensure it's always visible */
+      .login-container {
+        display: flex !important;
+        align-items: center;
+        height: 100%;
+      }
+
       @media (max-width: 767.98px) {
+        .navbar {
+          flex-wrap: wrap;
+          height: auto;
+          min-height: 70px;
+          padding-top: 0.5rem;
+          padding-bottom: 0.5rem;
+        }
+        
+        .header-bar {
+          height: auto;
+          min-height: 70px;
+        }
+        
+        .navbar-brand {
+          margin-right: auto;
+        }
+        
+        .always-visible {
+          order: 2;
+          margin-top: 0.5rem;
+          margin-bottom: 0.5rem;
+          width: 100%;
+          justify-content: center;
+        }
+        
+        .login-container {
+          order: 3;
+          width: 100%;
+          margin-top: 0.5rem;
+          justify-content: center;
+        }
+        
         .login-form {
+          display: flex;
           flex-direction: column;
-          align-items: stretch;
+          align-items: center;
           width: 100%;
         }
         
@@ -132,19 +172,27 @@
         .login-form button {
           margin-bottom: 0.5rem;
           width: 100%;
+          max-width: 300px;
         }
 
         .navbar-collapse {
-          margin-top: 1rem;
-          padding-top: 1rem;
+          order: 4;
+          margin-top: 0.5rem;
+          padding-top: 0.5rem;
           border-top: 1px solid rgba(255, 255, 255, 0.1);
-          position: absolute;
-          top: 70px; /* Position below navbar */
-          left: 0;
-          right: 0;
-          background-color: #1a1a2e;
-          z-index: 1000;
-          padding: 1rem;
+          width: 100%;
+        }
+        
+        .navbar-nav {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .navbar-toggler {
+          order: 1;
+          margin-left: auto;
         }
       }
     </style>
@@ -200,14 +248,16 @@
           </div>
           @else
           <!-- Login form for non-authenticated users (always visible) -->
-          <form action="/login" method="POST" class="login-form ml-auto">
-            @csrf
-            <input name="loginroll_no" type="text" placeholder="Roll No" autocomplete="off" />
-            <input name="loginpassword" type="password" placeholder="Password" />
-            <button class="btn btn-signin nav-btn">
-              <i class="fas fa-sign-in-alt mr-1"></i> Sign In
-            </button>
-          </form>
+          <div class="login-container ml-auto">
+            <form action="/login" method="POST" class="login-form">
+              @csrf
+              <input name="loginroll_no" type="text" placeholder="Roll No" autocomplete="off" />
+              <input name="loginpassword" type="password" placeholder="Password" />
+              <button class="btn btn-signin nav-btn">
+                <i class="fas fa-sign-in-alt mr-1"></i> Sign In
+              </button>
+            </form>
+          </div>
           @endauth
         </nav>
       </div>
