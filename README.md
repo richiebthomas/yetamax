@@ -1,6 +1,7 @@
 # YetaMax Event Management System
 
 YetaMax is a robust web-based event management system built with Laravel, designed to streamline the process of organizing and managing college events. The system supports multiple event categories, team registrations, and comprehensive admin controls.
+![image](https://github.com/user-attachments/assets/e8a07798-5746-4ccd-b6d4-c13970bcea52)
 
 ## Features
 
@@ -11,15 +12,32 @@ YetaMax is a robust web-based event management system built with Laravel, design
 - **Event Management**
   - Multiple event categories (Technical, Cultural, Seminar)
   - Day-wise event scheduling
+![image](https://github.com/user-attachments/assets/433a2719-0ffd-4698-855f-b65ba6983641)
   - Team and individual participation support
   - Dynamic seat availability tracking
   - WhatsApp group integration for approved participants
+![image](https://github.com/user-attachments/assets/7f6a10a6-b9b6-4639-8325-850163aa2aae)
+
 
 - **Admin Features**
   - Super admin dashboard
   - Event-specific admin management
   - Enrollment approval system
   - Real-time participant tracking
+![image](https://github.com/user-attachments/assets/45134980-4829-41dd-8fc5-41a5d69926e3)
+![image](https://github.com/user-attachments/assets/50fc1aad-d1f9-43fe-8ede-aeb5bb2ea0f6)
+![image](https://github.com/user-attachments/assets/ef6b1f15-1adc-4ba0-b922-14ace7c0526c)
+![image](https://github.com/user-attachments/assets/b183dd0a-2950-41f2-8188-82847ac8dc31)
+![image](https://github.com/user-attachments/assets/7a46298a-b21b-45e1-9ba9-9f5aa7a2ae8d)
+![image](https://github.com/user-attachments/assets/7a26229f-7c1f-4594-b564-9a73e5dda2d8)
+![image](https://github.com/user-attachments/assets/27198b0b-3b5f-43f9-9337-ce5c88e8f061)
+
+
+
+
+
+
+
 
 - **User Features**
   - Easy event registration
@@ -27,6 +45,8 @@ YetaMax is a robust web-based event management system built with Laravel, design
   - Profile management
   - Event enrollment history
   - Fee tracking
+![image](https://github.com/user-attachments/assets/9d8a9da3-25c6-4ab6-bef3-27dcc0a74e43)
+
 
 ## Prerequisites
 
