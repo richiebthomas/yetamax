@@ -50,8 +50,6 @@
         transform: translateY(-2px);
       }
       
-     
-      
       .btn-create:hover {
         background-color: #3db8df;
         border-color: #3db8df;
@@ -77,6 +75,7 @@
         background-color: #252542;
         color: white;
         margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
       }
       
       .login-form input::placeholder {
@@ -93,49 +92,105 @@
         background-color: #3db8df;
         border-color: #3db8df;
       }
+
+      /* Responsive navbar styles */
+      .navbar-toggler {
+        border-color: rgba(255, 255, 255, 0.3);
+        margin-left: 0.5rem;
+      }
+
+      .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+      }
+
+      /* Always visible items */
+      .always-visible {
+        display: flex !important;
+        align-items: center;
+      }
+
+      @media (max-width: 767.98px) {
+        .login-form {
+          flex-direction: column;
+          align-items: stretch;
+          width: 100%;
+        }
+        
+        .login-form input, 
+        .login-form button {
+          margin-bottom: 0.5rem;
+          width: 100%;
+        }
+
+        .navbar-collapse {
+          margin-top: 1rem;
+          padding-top: 1rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+      }
     </style>
   </head>
   <body>
     <header class="header-bar mb-3">
-      <div class="container d-flex flex-column flex-md-row align-items-center p-3">
-        <h4 class="my-0 mr-md-auto font-weight-normal"><a href="/" class="navbar-brand">YETAMAX 2029</a></h4>
-        <a href="/allevents" class="btn nav-btn">
-            <i class="fas fa-calendar-alt mr-2"></i>
-            <span>All Events</span>
-        </a>
-        @auth
-        @if(auth()->user()->isAdmin())
-        <a href="/admin/dashboard" class="btn nav-btn">
-            <i class="fas fa-user mr-1"></i> Admin
-        </a>
-        @endif
-        @if(auth()->user()->isEventAdmin1())
-        <a href="/event-admin/dashboard" class="btn nav-btn">
-            <i class="fas fa-user mr-1"></i> Event Admin
-        </a>
-        @endif
-        <div class="d-flex align-items-center">
-          <a href="/profile/{{auth()->user()->roll_no}}" class="btn nav-btn btn-profile">
-            <i class="fas fa-user mr-1"></i> Profile
-          </a>
+      <div class="container">
+        <nav class="navbar navbar-expand-md p-0">
+          <h4 class="my-0 mr-md-auto font-weight-normal"><a href="/" class="navbar-brand">YETAMAX 2029</a></h4>
           
-          <form action="/logout" method="POST" class="d-inline">
+          <!-- Always visible items -->
+          <div class="always-visible mr-2">
+            <a href="/allevents" class="btn nav-btn">
+              <i class="fas fa-calendar-alt mr-2"></i>
+              <span>All Events</span>
+            </a>
+            
+            @auth
+            <a href="/profile/{{auth()->user()->roll_no}}" class="btn nav-btn btn-profile">
+              <i class="fas fa-user mr-1"></i> Profile
+            </a>
+            @endauth
+          </div>
+          
+          @auth
+          <!-- Toggler for authenticated users -->
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          
+          <!-- Collapsible content for authenticated users -->
+          <div class="collapse navbar-collapse" id="navbarContent">
+            <div class="navbar-nav ml-auto">
+              @if(auth()->user()->isAdmin())
+              <a href="/admin/dashboard" class="btn nav-btn mb-2 mb-md-0">
+                <i class="fas fa-user-shield mr-1"></i> Admin
+              </a>
+              @endif
+              
+              @if(auth()->user()->isEventAdmin1())
+              <a href="/event-admin/dashboard" class="btn nav-btn mb-2 mb-md-0">
+                <i class="fas fa-user-cog mr-1"></i> Event Admin
+              </a>
+              @endif
+              
+              <form action="/logout" method="POST" class="d-inline">
+                @csrf
+                <button class="btn nav-btn btn-signout mb-2 mb-md-0">
+                  <i class="fas fa-sign-out-alt mr-1"></i> Sign Out
+                </button>
+              </form>
+            </div>
+          </div>
+          @else
+          <!-- Login form for non-authenticated users (always visible) -->
+          <form action="/login" method="POST" class="login-form ml-auto">
             @csrf
-            <button class="btn nav-btn btn-signout">
-              <i class="fas fa-sign-out-alt mr-1"></i> Sign Out
+            <input name="loginroll_no" type="text" placeholder="Roll No" autocomplete="off" />
+            <input name="loginpassword" type="password" placeholder="Password" />
+            <button class="btn btn-signin nav-btn">
+              <i class="fas fa-sign-in-alt mr-1"></i> Sign In
             </button>
           </form>
-        </div>
-        @else
-        <form action="/login" method="POST" class="login-form d-flex flex-column flex-md-row align-items-center">
-          @csrf
-          <input name="loginroll_no" type="text" placeholder="Roll No" autocomplete="off" />
-          <input name="loginpassword" type="password" placeholder="Password" />
-          <button class="btn btn-signin nav-btn">
-            <i class="fas fa-sign-in-alt mr-1"></i> Sign In
-          </button>
-        </form>
-        @endauth
+          @endauth
+        </nav>
       </div>
     </header>
     <!-- header ends here -->
