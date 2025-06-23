@@ -64,7 +64,7 @@ YetaMax is a robust web-based event management system built with Laravel, design
 ![image](https://github.com/user-attachments/assets/9d8a9da3-25c6-4ab6-bef3-27dcc0a74e43)
 
 ## Demo: Want a quick demo? 
-Go to http://yetamax.free.nf and login with
+Go to http://yetamax.free.nf/login and login with
 roll: 5022161 & pass: 12345678
 (All admin rights given to this account for testing - user, event-admin and admin pages)
 
